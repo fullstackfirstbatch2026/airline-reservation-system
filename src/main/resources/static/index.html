@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SkyReserve - Airline Reservation System</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-plane-departure"></i>
+            </div>
+
+            <div>
+                <h2>SkyReserve</h2>
+                <span>Airline System</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <button class="nav-item active" onclick="showSection('dashboard')">
+                <i class="fa-solid fa-chart-pie"></i>
+                Dashboard
+            </button>
+
+            <button class="nav-item" onclick="showSection('flights')">
+                <i class="fa-solid fa-plane"></i>
+                Flights
+            </button>
+
+            <button class="nav-item" onclick="showSection('passengers')">
+                <i class="fa-solid fa-users"></i>
+                Passengers
+            </button>
+
+            <button class="nav-item" onclick="showSection('bookings')">
+                <i class="fa-solid fa-ticket"></i>
+                Bookings
+            </button>
+
+            <button class="nav-item" onclick="showSection('payments')">
+                <i class="fa-solid fa-credit-card"></i>
+                Payments
+            </button>
+
+            <button class="nav-item" onclick="showSection('reports')">
+                <i class="fa-solid fa-file-lines"></i>
+                Reports
+            </button>
+
+            <button class="nav-item" onclick="showSection('analytics')">
+                <i class="fa-solid fa-chart-column"></i>
+                Analytics
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="database-status">
+                <span class="status-dot"></span>
+                Database Connected
+            </div>
+
+            <p>Airline Reservation System</p>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p>Manage your airline reservation system</p>
+            </div>
+
+            <div class="top-actions">
+
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                            type="text"
+                            id="globalSearch"
+                            placeholder="Search flights, passengers..."
+                            oninput="globalSearch()">
+                </div>
+
+                <div class="profile">
+                    <div class="profile-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div>
+                        <strong>Administrator</strong>
+                        <span>System Manager</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section id="dashboard" class="section active">
+
+            <div class="welcome-card">
+
+                <div>
+                    <span class="small-label">WELCOME BACK</span>
+
+                    <h2>Airline Reservation Dashboard</h2>
+
+                    <p>
+                        Manage flights, passengers, bookings and payments
+                        from one place.
+                    </p>
+                </div>
+
+                <div class="welcome-plane">
+                    <i class="fa-solid fa-plane"></i>
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fa-solid fa-plane"></i>
+                    </div>
+
+                    <div>
+                        <span>Total Flights</span>
+                        <h2 id="flightCount">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div>
+                        <span>Passengers</span>
+                        <h2 id="passengerCount">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fa-solid fa-ticket"></i>
+                    </div>
+
+                    <div>
+                        <span>Bookings</span>
+                        <h2 id="bookingCount">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fa-solid fa-credit-card"></i>
+                    </div>
+
+                    <div>
+                        <span>Payments</span>
+                        <h2 id="paymentCount">0</h2>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Available Flights</h2>
+                    <p>Select a flight to make a reservation.</p>
+                </div>
+
+                <button class="outline-btn" onclick="showSection('flights')">
+                    View All Flights
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+            </div>
+
+            <div id="dashboardFlights" class="flight-grid"></div>
+
+        </section>
+
+
+        <!-- ================= FLIGHTS ================= -->
+
+        <section id="flights" class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="small-label">FLIGHT MANAGEMENT</span>
+                    <h2>Available Flights</h2>
+
+                    <p>
+                        All flights stored in the database are displayed here.
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="flightCards" class="flight-grid"></div>
+
+        </section>
+
+
+        <!-- ================= PASSENGERS ================= -->
+
+        <section id="passengers" class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="small-label">PASSENGER MANAGEMENT</span>
+                    <h2>Passengers</h2>
+
+                    <p>
+                        Registered passengers in the system.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="passengerTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= BOOKINGS ================= -->
+
+        <section id="bookings" class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="small-label">BOOKING MANAGEMENT</span>
+                    <h2>Bookings</h2>
+
+                    <p>
+                        All flight reservations.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Passenger</th>
+                        <th>Flight</th>
+                        <th>Route</th>
+                        <th>Date</th>
+                        <th>Seat</th>
+                        <th>Fare</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="bookingTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PAYMENTS ================= -->
+
+        <section id="payments" class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="small-label">PAYMENT MANAGEMENT</span>
+                    <h2>Payments</h2>
+
+                    <p>
+                        Payment records generated for bookings.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Booking ID</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="paymentTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= REPORTS ================= -->
+
+        <section id="reports" class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="small-label">DATABASE OPERATIONS</span>
+                    <h2>Reports & SQL Operations</h2>
+
+                    <p>
+                        This section demonstrates the JOIN and Subquery
+                        requirements of the project.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- JOIN -->
+
+            <div class="requirement-card">
+
+                <div class="requirement-header">
+
+                    <div class="requirement-icon blue">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+
+                    <div>
+                        <h3>JOIN Operation</h3>
+
+                        <p>
+                            Combines booking, passenger and flight information.
+                        </p>
+                    </div>
+
+                    <span class="requirement-tag">
+                        SQL JOIN
+                    </span>
+
+                </div>
+
+
+                <div class="sql-box">
+
+                    <span>JOIN Query</span>
+
+                    <code>
+                        bookings → passengers → flights
+                    </code>
+
+                </div>
+
+
+                <div class="table-card inner-table">
+
+                    <table>
+
+                        <thead>
+
+                        <tr>
+                            <th>Booking</th>
+                            <th>Passenger</th>
+                            <th>Email</th>
+                            <th>Flight</th>
+                            <th>Route</th>
+                            <th>Date</th>
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="joinTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUBQUERY -->
+
+            <div class="requirement-card">
+
+                <div class="requirement-header">
+
+                    <div class="requirement-icon purple">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+
+                    <div>
+                        <h3>Subquery Operation</h3>
+
+                        <p>
+                            Finds flights whose booking count is greater
+                            than the average booking count.
+                        </p>
+                    </div>
+
+                    <span class="requirement-tag purple-tag">
+                        SUBQUERY
+                    </span>
+
+                </div>
+
+
+                <div class="subquery-explanation">
+
+                    <div class="subquery-step">
+
+                        <span>01</span>
+
+                        <div>
+                            <strong>Inner Query</strong>
+
+                            <p>
+                                Counts bookings for each flight.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="subquery-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+
+
+                    <div class="subquery-step">
+
+                        <span>02</span>
+
+                        <div>
+                            <strong>AVG()</strong>
+
+                            <p>
+                                Calculates the average bookings per flight.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="subquery-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+
+
+                    <div class="subquery-step">
+
+                        <span>03</span>
+
+                        <div>
+                            <strong>Main Query</strong>
+
+                            <p>
+                                Finds flights above the average.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="subquery-result">
+
+                    <div class="result-title">
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        <div>
+                            <strong>Subquery Result</strong>
+
+                            <span>
+                                Flights above average bookings
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div id="subqueryResult"></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROCEDURE / TRIGGER / FUNCTION -->
+
+            <div class="operations-grid">
+
+                <div class="operation-card">
+
+                    <div class="operation-icon green">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+
+                    <h3>Stored Procedure</h3>
+
+                    <p>
+                        <strong>book_flight</strong>
+                    </p>
+
+                    <span>
+                        Executes when a passenger confirms a flight booking.
+                    </span>
+
+                </div>
+
+
+                <div class="operation-card">
+
+                    <div class="operation-icon orange">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+
+                    <h3>Trigger</h3>
+
+                    <p>
+                        <strong>after_booking_insert</strong>
+                    </p>
+
+                    <span>
+                        Automatically decreases available seats after booking.
+                    </span>
+
+                </div>
+
+
+                <div class="operation-card">
+
+                    <div class="operation-icon blue">
+                        <i class="fa-solid fa-function"></i>
+                    </div>
+
+                    <h3>Function</h3>
+
+                    <p>
+                        <strong>calculate_fare</strong>
+                    </p>
+
+                    <span>
+                        Calculates final fare with tax during booking.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ANALYTICS ================= -->
+
+        <section id="analytics" class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="small-label">SYSTEM OVERVIEW</span>
+                    <h2>Analytics</h2>
+
+                    <p>
+                        Quick overview of flights and reservation activity.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="analytics-grid">
+
+                <div class="analytics-card">
+
+                    <span>Total Flights</span>
+                    <strong id="analyticsFlights">0</strong>
+
+                    <p>
+                        Flights available in database
+                    </p>
+
+                </div>
+
+
+                <div class="analytics-card">
+
+                    <span>Total Bookings</span>
+                    <strong id="analyticsBookings">0</strong>
+
+                    <p>
+                        Reservations made
+                    </p>
+
+                </div>
+
+
+                <div class="analytics-card">
+
+                    <span>Total Passengers</span>
+                    <strong id="analyticsPassengers">0</strong>
+
+                    <p>
+                        Registered passengers
+                    </p>
+
+                </div>
+
+
+                <div class="analytics-card">
+
+                    <span>Total Payments</span>
+                    <strong id="analyticsPayments">0</strong>
+
+                    <p>
+                        Payment transactions
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-panel">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+
+                <div>
+
+                    <h3>Project Requirements</h3>
+
+                    <p>
+                        This application demonstrates REST API integration
+                        with MySQL, SQL JOIN, Subquery, Stored Procedure,
+                        Trigger and Function.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= BOOKING MODAL ================= -->
+
+<div id="bookingModal" class="modal">
+
+    <div class="modal-box booking-box">
+
+        <button class="close-btn" onclick="closeBookingModal()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <div class="modal-title">
+
+            <div class="modal-icon">
+                <i class="fa-solid fa-plane-departure"></i>
+            </div>
+
+            <div>
+
+                <span>FLIGHT RESERVATION</span>
+
+                <h2>Book Your Flight</h2>
+
+            </div>
+
+        </div>
+
+
+        <div id="selectedFlightInfo" class="selected-flight"></div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Passenger Name</label>
+
+                <input
+                        type="text"
+                        id="passengerName"
+                        placeholder="Enter passenger name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Email</label>
+
+                <input
+                        type="email"
+                        id="passengerEmail"
+                        placeholder="Enter email">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Phone</label>
+
+                <input
+                        type="text"
+                        id="passengerPhone"
+                        placeholder="Enter phone number">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Seat Number</label>
+
+                <input
+                        type="text"
+                        id="seatNumber"
+                        placeholder="Example: 12A">
+
+            </div>
+
+        </div>
+
+
+        <!-- FARE CALCULATION IS INSIDE BOOKING -->
+
+        <div class="fare-summary">
+
+            <div class="fare-row">
+
+                <span>Base Fare</span>
+
+                <strong id="baseFare">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="fare-row">
+
+                <span>Tax (5%)</span>
+
+                <strong id="taxAmount">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="fare-divider"></div>
+
+
+            <div class="fare-row final-fare">
+
+                <span>Final Fare</span>
+
+                <strong id="finalFare">
+                    ₹0
+                </strong>
+
+            </div>
+
+            <p class="function-note">
+                <i class="fa-solid fa-function"></i>
+                Fare calculated using MySQL function
+                <strong>calculate_fare()</strong>
+            </p>
+
+        </div>
+
+
+        <button class="confirm-btn" onclick="confirmBooking()">
+
+            <i class="fa-solid fa-ticket"></i>
+
+            Confirm Booking
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= SUCCESS MODAL ================= -->
+
+<div id="successModal" class="modal">
+
+    <div class="modal-box success-box">
+
+        <div class="success-icon">
+            <i class="fa-solid fa-check"></i>
+        </div>
+
+        <h2>Booking Successful!</h2>
+
+        <p id="successMessage">
+            Your flight has been reserved successfully.
+        </p>
+
+
+        <div class="success-operations">
+
+            <div>
+                <i class="fa-solid fa-database"></i>
+
+                <span>
+                    Stored Procedure Executed
+                </span>
+            </div>
+
+
+            <div>
+                <i class="fa-solid fa-bolt"></i>
+
+                <span>
+                    Trigger Updated Seat Availability
+                </span>
+            </div>
+
+        </div>
+
+
+        <button class="confirm-btn" onclick="closeSuccessModal()">
+            Done
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="toast" class="toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMessage">Success</span>
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
